@@ -1,8 +1,10 @@
 package com.nac.game.GameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.nac.game.Utilities.utils;
 
 /**
  * Created by HappySaila on 10/29/16.
@@ -15,6 +17,8 @@ public class Block{
     Sprite currentSprite;
     boolean flashUp;
     float alpha;
+    int speed;
+    float rotation;
 
     Board board;
     xY position;
@@ -35,12 +39,17 @@ public class Block{
         //Set sizes
         cross.setSize(board.blockSize, board.blockSize);
         cross.setPosition(renderPosition.x, renderPosition.y);
+        cross.setOrigin(cross.getWidth()/2, cross.getHeight()/2);
         naught.setSize(board.blockSize, board.blockSize);
         naught.setPosition(renderPosition.x, renderPosition.y);
+        naught.setOrigin(naught.getWidth()/2, naught.getHeight()/2);
+        speed = utils.generate(-15, 15);
+
     }
 
     public void render(SpriteBatch sb){
         renderIcons(sb);
+        update(Gdx.graphics.getDeltaTime());
 }
 
     private void renderIcons(SpriteBatch sb) {
@@ -75,12 +84,10 @@ public class Block{
         currentSprite.draw(sb);
     }
 
-    private Sprite getCurrentSprite(){
-        if (val ==1){
-            return cross;
-        }else{
-            return naught;
-        }
+    private void update(float delta){
+        rotation+=delta*speed;
+        naught.setRotation(rotation);
+        cross.setRotation(rotation);
     }
 
     public int getVal() {
