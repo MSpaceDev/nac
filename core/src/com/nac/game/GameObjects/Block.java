@@ -27,4 +27,16 @@ public class Block {
         sb.draw(img, boardStart.x + (position.x * board.blockSize), boardStart.y + (position.y * board.blockSize),
                 board.blockSize, board.blockSize);
     }
+
+    public int getVal() {
+        return val;
+    }
+
+    public int getX(){
+        return position.x;
+    }
+
+    public int getY(){
+        return position.y;
+    }
 }

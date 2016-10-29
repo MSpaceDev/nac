@@ -1,5 +1,6 @@
 package com.nac.game.Utilities;
 
+import com.nac.game.GameObjects.Block;
 import com.nac.game.GameObjects.Board;
 
 /**
@@ -8,29 +9,82 @@ import com.nac.game.GameObjects.Board;
  */
 public class GameOverCheck {
     public static boolean isGameOver(Board board){
-//        Tree tree = generateTree(board);
-        return true;
+        boolean gameOver = false;
+        Block block;
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j <  board.getSize(); j++) {
+                block = board.getGrid()[i][j];
+                if (traverse(block, board) == true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean traverse(Block block, Board board){
+        int x = block.getX();
+        int y = block.getY();
+        int val = block.getVal();
+        int count = 0; //if count = 3 then we have a
+        boolean gameOver = false;
+
+        //traverse right
+        while(!gameOver){
+            try {
+                int newVal = board.getGrid()[x++][y].getVal();
+                if (newVal == val){
+                    count++;
+                }else{
+                    count = 1;
+                }
+                if (count == 3){
+                    return true;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                gameOver = false;
+                break;
+            }
+        }
+
+        //traverse diagonal
+        while(!gameOver){
+            try {
+                int newVal = board.getGrid()[x++][y++].getVal();
+                if (newVal == val){
+                    count++;
+                }else{
+                    count = 1;
+                }
+                if (count == 3){
+                    return true;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                gameOver = false;
+                break;
+            }
+        }
+
+        //traverse down
+        while(!gameOver){
+            try {
+                int newVal = board.getGrid()[x][y++].getVal();
+                if (newVal == val){
+                    count++;
+                }else{
+                    count = 1;
+                }
+                if (count == 3){
+                    return true;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                gameOver = false;
+                break;
+            }
+        }
+        return gameOver;
     }
 }
 
-class Node{
-    Node parent;
-    Node child1;
-    Node child2;
-    Node child3;
 
-    public Node(Node parent, Node child1, Node child2, Node child3) {
-        this.parent = parent;
-        this.child1 = child1;
-        this.child2 = child2;
-        this.child3 = child3;
-    }
-}
 
-class Tree{
-    Node root;
-
-    public Tree(Node root) {
-        this.root = root;
-    }
-}

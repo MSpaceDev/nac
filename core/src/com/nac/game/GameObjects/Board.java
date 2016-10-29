@@ -39,4 +39,12 @@ public class Board {
             }
         }
     }
+
+    public Block[][] getGrid() {
+        return grid;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }
