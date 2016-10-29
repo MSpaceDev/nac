@@ -18,16 +18,19 @@ public class GameScreen implements Screen {
     Texture backInactive;
     Texture backActive;
     boolean back;
-    boolean gameOver;
     int x;
     int y;
 
     Driver game;
     Board board;
 
-    public GameScreen(Driver game) {
+    public GameScreen(Driver game, boolean simple) {
         this.game = game;
-        board = new Board(game, 1, new xY(60,20));
+        if (simple){
+            board = new Board(game, 1, new xY(60,20));
+        } else{
+            board = new Board(game, 2, new xY(60,20));
+        }
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
     }

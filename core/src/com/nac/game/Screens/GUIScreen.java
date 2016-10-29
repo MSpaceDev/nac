@@ -22,7 +22,7 @@ public class GUIScreen extends GameScreen {
     int y;
 
     public GUIScreen(Driver game) {
-        super(game);
+        super(game, true);
         bg = new Texture("background.png");
         title = new Texture("buttons/title.png");
         playInactive = new Texture("buttons/playInactive.png");
@@ -44,7 +44,7 @@ public class GUIScreen extends GameScreen {
 
     private void buttonListener(){
         if (play){
-            game.AddScreen(new GameScreen(game));
+            game.AddScreen(new SizeSelectScreen(game));
         } else if (exit){
             System.exit(0);
         }
