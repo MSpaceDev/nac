@@ -3,6 +3,7 @@ package com.nac.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
 
@@ -10,14 +11,25 @@ import com.nac.game.Driver;
  * Created by user on 10/29/2016.
  */
 public class GameOverScreen extends GUIScreen {
+    Texture xWin;
+    Texture oWin;
+    boolean playerOneWon;
 
-    public GameOverScreen(Driver game) {
+    public GameOverScreen(Driver game, boolean playerOneWon) {
         super(game);
+        xWin = new Texture("buttons/xWin.png");
+        oWin = new Texture("buttons/oWin.png");
+        this.playerOneWon = playerOneWon;
     }
 
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
+        if(playerOneWon) {
+            game.batch.draw(xWin, Driver.width / 2, Driver.height / 8 * 6);
+        } else {
+            game.batch.draw(oWin, Driver.width / 2, Driver.height / 8 * 6);
+        }
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             buttonListener();
         }

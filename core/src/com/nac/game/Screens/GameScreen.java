@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
             game.DisposeScreen();
-            game.AddScreen(new GameOverScreen(game));
+            game.AddScreen(new GameOverScreen(game, true));
         }
         game.batch.end();
     }
@@ -82,6 +82,11 @@ public class GameScreen implements Screen {
                 board.draw(currentX, currentY, 2);
             }
             playerOneTurn = !playerOneTurn;
+            boolean gameOver = GameOverCheck.isGameOver(board);
+            if (gameOver){
+                game.DisposeScreen();
+                game.AddScreen(new GameOverScreen(game, playerOneWon));
+            }
         }
     }
 
