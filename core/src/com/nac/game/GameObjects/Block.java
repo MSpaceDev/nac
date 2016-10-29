@@ -46,13 +46,19 @@ public class Block{
     private void renderIcons(SpriteBatch sb) {
         if (val == 1) {
             cross.draw(sb);
+            cross.setAlpha(1);
         } else if (val == 2) {
             naught.draw(sb);
+            naught.setAlpha(1);
         }
     }
 
-    public void light(float delta){
-        currentSprite = getCurrentSprite();
+    public void light(float delta, boolean playerOneTurn, SpriteBatch sb){
+        if (playerOneTurn){
+            currentSprite = cross;
+        }else{
+            currentSprite = naught;
+        }
         if (flashUp){
             alpha += delta;
             currentSprite.setAlpha(alpha);
@@ -66,6 +72,7 @@ public class Block{
                 flashUp = true;
             }
         }
+        currentSprite.draw(sb);
     }
 
     private Sprite getCurrentSprite(){
