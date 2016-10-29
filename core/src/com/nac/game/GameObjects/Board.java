@@ -49,7 +49,9 @@ public class Board{
     }
 
     public void draw(int x, int y, int val){
-        grid[y][x].setVal(val);
+        if (grid[y][x].getVal() == 0){
+            grid[y][x].setVal(val);
+        }
     }
 
     public int getBlockSize() {
@@ -68,7 +70,9 @@ public class Board{
         return size;
     }
 
-    public void light(int x, int y){
-        grid[y][x].light(Gdx.graphics.getDeltaTime());
+    public void light(int x, int y, boolean playerOneTurn, SpriteBatch sb){
+        if (grid[y][x].getVal()==0){
+            grid[y][x].light(Gdx.graphics.getDeltaTime(), playerOneTurn, sb);
+        }
     }
 }

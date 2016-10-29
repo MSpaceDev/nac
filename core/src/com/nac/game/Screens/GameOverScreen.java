@@ -10,13 +10,15 @@ import com.nac.game.Driver;
 /**
  * Created by user on 10/29/2016.
  */
-public class GameOverScreen extends GUIScreen {
+public class GameOverScreen extends GameScreen {
     Texture xWin;
     Texture oWin;
+    Texture bg;
     boolean playerOneWon;
 
     public GameOverScreen(Driver game, boolean playerOneWon) {
-        super(game);
+        super(game, true);
+        bg = new Texture("background.png");
         xWin = new Texture("buttons/xWin.png");
         oWin = new Texture("buttons/oWin.png");
         this.playerOneWon = playerOneWon;
@@ -26,9 +28,9 @@ public class GameOverScreen extends GUIScreen {
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
         if(playerOneWon) {
-            game.batch.draw(xWin, Driver.width / 2, Driver.height / 8 * 6);
+            game.batch.draw(xWin, Driver.width / 2 - xWin.getWidth() / 2, Driver.height / 8 * 5);
         } else {
-            game.batch.draw(oWin, Driver.width / 2, Driver.height / 8 * 6);
+            game.batch.draw(oWin, Driver.width / 2 - oWin.getWidth() / 2, Driver.height / 8 * 5);
         }
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             buttonListener();
@@ -40,6 +42,7 @@ public class GameOverScreen extends GUIScreen {
 
     private void buttonListener(){
         if(back){
+            buttonPress.play();
             game.DisposeScreen();
         }
     }

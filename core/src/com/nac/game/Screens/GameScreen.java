@@ -3,12 +3,14 @@ package com.nac.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
 import com.nac.game.GameObjects.Board;
 import com.nac.game.GameObjects.xY;
+import com.nac.game.Utilities.ClickManager;
 import com.nac.game.Utilities.GameOverCheck;
 
 /**
@@ -19,11 +21,15 @@ public class GameScreen implements Screen {
     Texture backActive;
     boolean back;
     boolean playerOneTurn;
+    boolean playerOneWon;
+    Sound buttonPress;
     int x;
     int y;
 
     Driver game;
     Board board;
+
+    ClickManager clickManager;
 
     public GameScreen(Driver game, boolean simple) {
         this.game = game;
@@ -32,14 +38,16 @@ public class GameScreen implements Screen {
         } else{
             board = new Board(game, 2, new xY(60,20));
         }
+        buttonPress = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonPress.mp3"));
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
+        clickManager = new ClickManager();
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
         game.batch.begin();
+        update(delta);
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
         board.render(game.batch);
         updateButtons();
@@ -56,33 +64,35 @@ public class GameScreen implements Screen {
 
     private void update(float delta){
         updateCursor(delta);
+        clickManager.update(delta);
     }
 
     private void updateCursor(float delta){
         int currentX = (x - board.getBoardStart().x)/board.getBlockSize();
         int currentY = (y - board.getBoardStart().y)/board.getBlockSize();
 
-        if (currentX>2){
-            currentX = 2;
+        if (currentX>board.getSize()-1){
+            currentX = board.getSize()-1;
         }else if(currentX<0){
             currentX = 0;
         }
 
-        if (currentY>2){
-            currentY = 2;
+        if (currentY>board.getSize()-1){
+            currentY = board.getSize()-1;
         }else if(currentY<0){
             currentY = 0;
         }
-        board.light(currentX, currentY);
+        board.light(currentX, currentY, playerOneTurn, game.batch);
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
+            clickManager.reset();
             if (playerOneTurn){
                 board.draw(currentX, currentY, 1);
             }else{
                 board.draw(currentX, currentY, 2);
             }
             playerOneTurn = !playerOneTurn;
-            boolean gameOver = GameOverCheck.isGameOver(board);
+            boolean gameOver = GameOverCheck.isGameOver(board, this);
             if (gameOver){
                 game.DisposeScreen();
                 game.AddScreen(new GameOverScreen(game, playerOneWon));
@@ -90,9 +100,14 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void setPlayerOneWon(boolean playerOneWon) {
+        this.playerOneWon = playerOneWon;
+    }
+
     //region button
     private void buttonListener(){
         if(back) {
+            buttonPress.play();
             game.DisposeScreen();
         }
     }

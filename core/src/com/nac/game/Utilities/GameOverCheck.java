@@ -2,6 +2,7 @@ package com.nac.game.Utilities;
 
 import com.nac.game.GameObjects.Block;
 import com.nac.game.GameObjects.Board;
+import com.nac.game.Screens.GameScreen;
 
 /**
  * Created by HappySaila on 10/29/16.
@@ -9,12 +10,12 @@ import com.nac.game.GameObjects.Board;
  */
 public class GameOverCheck {
 
-    public static boolean isGameOver(Board board){
+    public static boolean isGameOver(Board board, GameScreen gameScreen){
         Block block;
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j <  board.getSize(); j++) {
                 block = board.getGrid()[i][j];
-                if (traverse(block, board) == true){
+                if (traverse(block, board, gameScreen) == true){
                     //a win was found
                     return true;
                 }
@@ -23,13 +24,40 @@ public class GameOverCheck {
         return false;
     }
 
-    private static boolean traverse(Block block, Board board){
-        int x = block.getX();
-        int y = block.getY();
+    private static boolean traverse(Block block, Board board, GameScreen gameScreen){
+        int x = block.getY();
+        int y = block.getX();
         int val = block.getVal();
-        int count = 0; //if count = 3 then we have a
+        int count = 0; //if count = 3 then we have a winner
         boolean gameOver = false;
 
+        //traverse up
+        while(!gameOver){
+            try {
+                int newVal = board.getGrid()[x][y++].getVal();
+                if (newVal == val){
+                    if (val!=0){
+                        count++;
+                    }
+                }else{
+                    val = newVal;
+                    count = 1;
+                }
+                if (count == 3){
+                    gameScreen.setPlayerOneWon(checkWinner(val));
+                    return true;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                gameOver = false;
+                break;
+            }
+        }
+
+        x = block.getY();
+        y = block.getX();
+        val = block.getVal();
+        count = 0; //if count = 3 then we have a winner
+        gameOver = false;
         //traverse right
         while(!gameOver){
             try {
@@ -39,18 +67,24 @@ public class GameOverCheck {
                         count++;
                     }
                 }else{
+                    val = newVal;
                     count = 1;
                 }
                 if (count == 3){
+                    gameScreen.setPlayerOneWon(checkWinner(val));
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                gameOver = false;
                 break;
             }
         }
 
-        //traverse diagonal
+        x = block.getY();
+        y = block.getX();
+        val = block.getVal();
+        count = 0; //if count = 3 then we have a winner
+        gameOver = false;
+        //traverse diagonal up
         while(!gameOver){
             try {
                 int newVal = board.getGrid()[x++][y++].getVal();
@@ -59,37 +93,52 @@ public class GameOverCheck {
                         count++;
                     }
                 }else{
+                    val = newVal;
                     count = 1;
                 }
                 if (count == 3){
+                    gameScreen.setPlayerOneWon(checkWinner(val));
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                gameOver = false;
                 break;
             }
         }
 
-        //traverse down
+        x = block.getY();
+        y = block.getX();
+        val = block.getVal();
+        count = 0; //if count = 3 then we have a winner
+        gameOver = false;
+        //traverse diagonal down
         while(!gameOver){
             try {
-                int newVal = board.getGrid()[x][y++].getVal();
+                int newVal = board.getGrid()[x++][board.getSize()-1 - y++].getVal();
                 if (newVal == val){
                     if (val!=0){
                         count++;
                     }
                 }else{
+                    val = newVal;
                     count = 1;
                 }
                 if (count == 3){
+                    gameScreen.setPlayerOneWon(checkWinner(val));
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                gameOver = false;
                 break;
             }
         }
         return gameOver;
+    }
+
+    private static boolean checkWinner(int val){
+        if (val == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

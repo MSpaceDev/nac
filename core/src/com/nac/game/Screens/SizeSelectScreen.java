@@ -9,16 +9,18 @@ import com.nac.game.Driver;
 /**
  * Created by user on 10/29/2016.
  */
-public class SizeSelectScreen extends GUIScreen {
+public class SizeSelectScreen extends GameScreen {
     Texture simpleActive;
     Texture simpleInactive;
     Texture megaActive;
     Texture megaInactive;
+    Texture bg;
     boolean simple;
     boolean mega;
 
     public SizeSelectScreen(Driver game) {
-        super(game);
+        super(game, true);
+        bg = new Texture("background.png");
         simpleActive = new Texture("buttons/simpleActive.png");
         simpleInactive = new Texture("buttons/simpleInactive.png");
         megaActive = new Texture("buttons/megaActive.png");
@@ -38,9 +40,11 @@ public class SizeSelectScreen extends GUIScreen {
 
     private void buttonListener(){
         if(simple) {
+            buttonPress.play();
             game.DisposeScreen();
             game.AddScreen(new GameScreen(game, true));
         } else if(mega){
+            buttonPress.play();
             game.DisposeScreen();
             game.AddScreen(new GameScreen(game, false));
         }
