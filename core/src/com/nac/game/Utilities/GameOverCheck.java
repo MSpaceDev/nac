@@ -9,7 +9,7 @@ import com.nac.game.GameObjects.Board;
 public class GameOverCheck {
     public static boolean isGameOver(Board board){
 //        Tree tree = generateTree(board);
-        return true;
+        return false;
     }
 }
 
