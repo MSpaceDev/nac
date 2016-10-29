@@ -6,22 +6,26 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.nac.game.Driver;
+import com.nac.game.GameObjects.Board;
+import com.nac.game.GameObjects.xY;
 
 /**
  * Created by user on 10/29/2016.
  */
 public class GameScreen implements Screen {
     Driver game;
-    Texture img = new Texture("cross.png");
+    Board board;
+
     public GameScreen(Driver game) {
         this.game = game;
+        board = new Board(game, 1, new xY(0,0));
     }
 
     @Override
     public void render(float delta) {
         game.batch.begin();
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
-        game.batch.draw(img, 0, 0);
+        board.render(game.batch);
         game.batch.end();
     }
 

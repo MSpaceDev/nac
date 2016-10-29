@@ -1,4 +1,6 @@
-package com.nac.game;
+package com.nac.game.Utilities;
+
+import com.nac.game.GameObjects.Board;
 
 /**
  * Created by HappySaila on 10/29/16.
@@ -6,7 +8,8 @@ package com.nac.game;
  */
 public class GameOverCheck {
     public static boolean isGameOver(Board board){
-        Tree tree = generateTree(board);
+//        Tree tree = generateTree(board);
+        return true;
     }
 }
 
