@@ -65,4 +65,8 @@ public class Block {
     public int getY(){
         return position.y;
     }
+
+    public void setVal(int val) {
+        this.val = val;
+    }
 }

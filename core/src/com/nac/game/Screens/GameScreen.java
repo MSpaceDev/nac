@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
     Texture backInactive;
     Texture backActive;
     boolean back;
+    boolean playerOneTurn;
     int x;
     int y;
 
@@ -73,6 +74,15 @@ public class GameScreen implements Screen {
             currentY = 0;
         }
         board.light(currentX, currentY);
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            if (playerOneTurn){
+                board.draw(currentX, currentY, 1);
+            }else{
+                board.draw(currentX, currentY, 2);
+            }
+            playerOneTurn = !playerOneTurn;
+        }
     }
 
     //region button

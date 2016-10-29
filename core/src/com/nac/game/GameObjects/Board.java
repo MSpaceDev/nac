@@ -48,6 +48,10 @@ public class Board{
         }
     }
 
+    public void draw(int x, int y, int val){
+        grid[y][x].setVal(val);
+    }
+
     public int getBlockSize() {
         return blockSize;
     }
