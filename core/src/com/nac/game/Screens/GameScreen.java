@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(Driver game) {
         this.game = game;
-        board = new Board(game, 1, new xY(0,0));
+        board = new Board(game, 1, new xY(60,20));
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
     }
