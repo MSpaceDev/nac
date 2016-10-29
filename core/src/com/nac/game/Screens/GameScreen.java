@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
 import com.nac.game.GameObjects.Board;
 import com.nac.game.GameObjects.xY;
+import com.nac.game.Utilities.GameOverCheck;
 
 /**
  * Created by user on 10/29/2016.
@@ -17,6 +18,7 @@ public class GameScreen implements Screen {
     Texture backInactive;
     Texture backActive;
     boolean back;
+    boolean gameOver;
     int x;
     int y;
 
@@ -25,7 +27,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(Driver game) {
         this.game = game;
-        board = new Board(game, 1, new xY(0,0));
+        board = new Board(game, 1, new xY(60,20));
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
     }
@@ -40,11 +42,15 @@ public class GameScreen implements Screen {
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             buttonListener();
         }
+        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+            game.DisposeScreen();
+            game.AddScreen(new GameOverScreen(game));
+        }
         game.batch.end();
     }
 
     private void buttonListener(){
-        if(back){
+        if(back) {
             game.DisposeScreen();
         }
     }

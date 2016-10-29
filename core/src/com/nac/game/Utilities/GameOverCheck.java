@@ -8,13 +8,14 @@ import com.nac.game.GameObjects.Board;
  * will check if a given board state is game over or not
  */
 public class GameOverCheck {
+
     public static boolean isGameOver(Board board){
-        boolean gameOver = false;
         Block block;
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j <  board.getSize(); j++) {
                 block = board.getGrid()[i][j];
                 if (traverse(block, board) == true){
+                    //a win was found
                     return true;
                 }
             }
