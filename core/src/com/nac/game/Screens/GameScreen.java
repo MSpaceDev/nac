@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
     Texture backInactive;
     Texture backActive;
     boolean back;
+    boolean playerOneTurn;
     int x;
     int y;
 
@@ -37,6 +38,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        update(delta);
         game.batch.begin();
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
         board.render(game.batch);
@@ -52,6 +54,38 @@ public class GameScreen implements Screen {
         game.batch.end();
     }
 
+    private void update(float delta){
+        updateCursor(delta);
+    }
+
+    private void updateCursor(float delta){
+        int currentX = (x - board.getBoardStart().x)/board.getBlockSize();
+        int currentY = (y - board.getBoardStart().y)/board.getBlockSize();
+
+        if (currentX>2){
+            currentX = 2;
+        }else if(currentX<0){
+            currentX = 0;
+        }
+
+        if (currentY>2){
+            currentY = 2;
+        }else if(currentY<0){
+            currentY = 0;
+        }
+        board.light(currentX, currentY);
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            if (playerOneTurn){
+                board.draw(currentX, currentY, 1);
+            }else{
+                board.draw(currentX, currentY, 2);
+            }
+            playerOneTurn = !playerOneTurn;
+        }
+    }
+
+    //region button
     private void buttonListener(){
         if(back) {
             game.DisposeScreen();
@@ -76,6 +110,7 @@ public class GameScreen implements Screen {
             back = false;
         }
     }
+//    endregion
 
     //region rubbish
     @Override

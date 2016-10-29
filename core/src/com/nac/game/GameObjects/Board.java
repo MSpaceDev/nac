@@ -1,5 +1,6 @@
 package com.nac.game.GameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -47,11 +48,27 @@ public class Board{
         }
     }
 
+    public void draw(int x, int y, int val){
+        grid[y][x].setVal(val);
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    public xY getBoardStart() {
+        return boardStart;
+    }
+
     public Block[][] getGrid() {
         return grid;
     }
 
     public int getSize() {
         return size;
+    }
+
+    public void light(int x, int y){
+        grid[y][x].light(Gdx.graphics.getDeltaTime());
     }
 }

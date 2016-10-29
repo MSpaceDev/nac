@@ -35,7 +35,9 @@ public class GameOverCheck {
             try {
                 int newVal = board.getGrid()[x++][y].getVal();
                 if (newVal == val){
-                    count++;
+                    if (val!=0){
+                        count++;
+                    }
                 }else{
                     count = 1;
                 }
@@ -53,7 +55,9 @@ public class GameOverCheck {
             try {
                 int newVal = board.getGrid()[x++][y++].getVal();
                 if (newVal == val){
-                    count++;
+                    if (val!=0){
+                        count++;
+                    }
                 }else{
                     count = 1;
                 }
@@ -71,7 +75,9 @@ public class GameOverCheck {
             try {
                 int newVal = board.getGrid()[x][y++].getVal();
                 if (newVal == val){
-                    count++;
+                    if (val!=0){
+                        count++;
+                    }
                 }else{
                     count = 1;
                 }
