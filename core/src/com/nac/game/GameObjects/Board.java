@@ -47,10 +47,14 @@ public class Board{
         }
     }
 
-    public void draw(int x, int y, int val){
+    public boolean draw(int x, int y, int val){
+//        will return true if something was drawn
         if (grid[y][x].getVal() == 0){
             grid[y][x].setVal(val);
+        }else{
+            return false;
         }
+        return true;
     }
 
     public int getBlockSize() {

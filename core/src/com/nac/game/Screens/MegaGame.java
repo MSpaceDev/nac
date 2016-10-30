@@ -126,26 +126,31 @@ public class MegaGame extends GameScreen {
         }
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
+            //draw the current block- player making a move
             clickManager.reset();
+            boolean drawn;
             if (playerOneTurn){
-                currentBoard.draw(cellX, cellY, 1);
+                drawn = currentBoard.draw(cellX, cellY, 1);
                 game.sm.xPlace.play();
             }else{
-                currentBoard.draw(cellX, cellY, 2);
+                drawn = currentBoard.draw(cellX, cellY, 2);
                 game.sm.oPlace.play();
             }
-            playerOneTurn = !playerOneTurn;
+            if (drawn){
+                playerOneTurn = !playerOneTurn;
+            }
+
             boolean boardComplete = GameOverCheck.isGameOver(currentBoard);
             if (boardComplete){
 //                mark board on main scoring grid
                 mainBoard.draw(currentBoardX, currentBoardY, currentBoard.getWinner());
-
-                //get the new board and if that board is full, make the current board undefined
-                setCurrentBoard(cellX, cellY);
-                if (GameOverCheck.isBoardFull(currentBoard)){
-                    currentBoard = null;
-                }
             }
+            //get the new board and if that board is full, make the current board undefined
+            setCurrentBoard(cellX, cellY);
+            if (GameOverCheck.isBoardFull(currentBoard)){
+                currentBoard = null;
+            }
+            //check if the main board is full
             boolean boardFull = GameOverCheck.isMegaFull(board);
             if (boardFull){
                 boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
