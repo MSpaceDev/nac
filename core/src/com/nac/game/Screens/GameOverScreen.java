@@ -17,11 +17,12 @@ public class GameOverScreen extends GameScreen {
     boolean playerOneWon;
 
     public GameOverScreen(Driver game, boolean playerOneWon) {
-        super(game, true);
+        super(game);
         bg = new Texture("background.png");
         xWin = new Texture("buttons/xWin.png");
         oWin = new Texture("buttons/oWin.png");
         this.playerOneWon = playerOneWon;
+        game.sm.winner.play();
     }
 
     public void render(float delta){
@@ -42,7 +43,7 @@ public class GameOverScreen extends GameScreen {
 
     private void buttonListener(){
         if(back){
-            buttonPress.play();
+            game.sm.buttonPress.play();
             game.DisposeScreen();
         }
     }

@@ -17,32 +17,30 @@ public class Board{
     Texture back;
     xY boardStart;
     Block[][] grid;
-    int size; //how many grids must be nested in each cell
     int blockSize;
     int headingHeight;
 
-    public Board(Driver game, int gridSize, xY boardStart) {
+    public Board(Driver game, xY boardStart, int size) {
         this.game = game;
         this.boardStart = boardStart;
         back = new Texture("buttons/backInactive.png");
         headingHeight = back.getWidth();
-        size = (int)Math.pow(3, gridSize);
-        blockSize = Math.min(Driver.width - 2*boardStart.x, Driver.height - 2*boardStart.y) / size;
+        blockSize = size / 3;
         createGrid();
     }
 
     public void render(SpriteBatch sb){
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++) {
                 grid[i][j].render(game.batch);
             }
         }
     }
 
     private void createGrid(){
-        grid = new Block[size][size];
-        for (int i = 0; i < size; i++){
-            for (int j = 0; j < size; j++) {
+        grid = new Block[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++) {
                 grid[i][j] = new Block(j, i, this);
             }
         }
@@ -66,9 +64,6 @@ public class Board{
         return grid;
     }
 
-    public int getSize() {
-        return size;
-    }
 
     public void light(int x, int y, boolean playerOneTurn, SpriteBatch sb){
         if (grid[y][x].getVal()==0){

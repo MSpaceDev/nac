@@ -19,7 +19,7 @@ public class SizeSelectScreen extends GameScreen {
     boolean mega;
 
     public SizeSelectScreen(Driver game) {
-        super(game, true);
+        super(game);
         bg = new Texture("background.png");
         simpleActive = new Texture("buttons/simpleActive.png");
         simpleInactive = new Texture("buttons/simpleInactive.png");
@@ -40,13 +40,13 @@ public class SizeSelectScreen extends GameScreen {
 
     private void buttonListener(){
         if(simple) {
-            buttonPress.play();
             game.DisposeScreen();
-            game.AddScreen(new GameScreen(game, true));
+            game.AddScreen(new GameScreen(game));
+            game.sm.buttonPress.play();
         } else if(mega){
-            buttonPress.play();
             game.DisposeScreen();
-            game.AddScreen(new GameScreen(game, false));
+            game.AddScreen(new MegaGame(game));
+            game.sm.buttonPress.play();
         }
     }
 

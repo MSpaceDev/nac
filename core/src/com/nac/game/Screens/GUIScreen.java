@@ -28,7 +28,7 @@ public class GUIScreen extends GameScreen {
     int y;
 
     public GUIScreen(Driver game) {
-        super(game, true);
+        super(game);
         playMusic = true;
         if(playMusic){
             game.sm.music.loop(0.5f);

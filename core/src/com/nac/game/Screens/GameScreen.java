@@ -22,7 +22,6 @@ public class GameScreen implements Screen {
     boolean back;
     boolean playerOneTurn;
     boolean playerOneWon;
-    Sound buttonPress;
     int x;
     int y;
 
@@ -31,14 +30,9 @@ public class GameScreen implements Screen {
 
     ClickManager clickManager;
 
-    public GameScreen(Driver game, boolean simple) {
+    public GameScreen(Driver game) {
         this.game = game;
-        if (simple){
-            board = new Board(game, 1, new xY(60,20));
-        } else{
-            board = new Board(game, 2, new xY(60,20));
-        }
-        buttonPress = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonPress.mp3"));
+        board = new Board(game, new xY(60,20), Driver.width - 120);
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
         clickManager = new ClickManager();
@@ -71,14 +65,14 @@ public class GameScreen implements Screen {
         int currentX = (x - board.getBoardStart().x)/board.getBlockSize();
         int currentY = (y - board.getBoardStart().y)/board.getBlockSize();
 
-        if (currentX>board.getSize()-1){
-            currentX = board.getSize()-1;
+        if (currentX>2){
+            currentX = 2;
         }else if(currentX<0){
             currentX = 0;
         }
 
-        if (currentY>board.getSize()-1){
-            currentY = board.getSize()-1;
+        if (currentY>2){
+            currentY = 2;
         }else if(currentY<0){
             currentY = 0;
         }
@@ -88,14 +82,21 @@ public class GameScreen implements Screen {
             clickManager.reset();
             if (playerOneTurn){
                 board.draw(currentX, currentY, 1);
+                game.sm.xPlace.play();
             }else{
                 board.draw(currentX, currentY, 2);
+                game.sm.oPlace.play();
             }
             playerOneTurn = !playerOneTurn;
             boolean gameOver = GameOverCheck.isGameOver(board, this);
+            boolean boardFull = GameOverCheck.isBoardFull(board, this);
             if (gameOver){
                 game.DisposeScreen();
                 game.AddScreen(new GameOverScreen(game, playerOneWon));
+            }
+            else if (boardFull){
+                game.DisposeScreen();
+                game.AddScreen(new GameScreen(game));
             }
         }
     }
@@ -107,7 +108,7 @@ public class GameScreen implements Screen {
     //region button
     private void buttonListener(){
         if(back) {
-            buttonPress.play();
+            game.sm.buttonPress.play();
             game.DisposeScreen();
         }
     }

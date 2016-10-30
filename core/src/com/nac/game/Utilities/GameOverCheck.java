@@ -12,8 +12,8 @@ public class GameOverCheck {
 
     public static boolean isGameOver(Board board, GameScreen gameScreen){
         Block block;
-        for (int i = 0; i < board.getSize(); i++) {
-            for (int j = 0; j <  board.getSize(); j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j <  3; j++) {
                 block = board.getGrid()[i][j];
                 if (traverse(block, board, gameScreen) == true){
                     //a win was found
@@ -113,7 +113,7 @@ public class GameOverCheck {
         //traverse diagonal down
         while(!gameOver){
             try {
-                int newVal = board.getGrid()[x++][board.getSize()-1 - y++].getVal();
+                int newVal = board.getGrid()[x++][2 - y++].getVal();
                 if (newVal == val){
                     if (val!=0){
                         count++;
@@ -139,6 +139,17 @@ public class GameOverCheck {
         }else{
             return false;
         }
+    }
+
+    public static boolean isBoardFull(Board board, GameScreen gameScreen){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j <  2; j++) {
+                if (board.getGrid()[i][j].getVal() == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 

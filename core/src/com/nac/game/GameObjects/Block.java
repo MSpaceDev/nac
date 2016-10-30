@@ -53,7 +53,7 @@ public class Block{
 }
 
     private void renderIcons(SpriteBatch sb) {
-        if (val == 1) {
+        if (val == 0) {
             cross.draw(sb);
             cross.setAlpha(1);
         } else if (val == 2) {
