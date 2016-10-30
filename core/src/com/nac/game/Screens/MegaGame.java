@@ -20,6 +20,9 @@ public class MegaGame extends GameScreen {
     Board[][] board;
     xY boardStart;
     Board currentBoard;
+    int currentBoardX;
+    int currentBoardY;
+    Board mainBoard;
     Texture backInactive;
     Texture backActive;
     ClickManager clickManager;
@@ -31,6 +34,7 @@ public class MegaGame extends GameScreen {
         board = new Board[3][3];
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
+        clickManager = new ClickManager();
         createBoard();
     }
 
@@ -55,8 +59,20 @@ public class MegaGame extends GameScreen {
         }
     }
 
+    private void renderChooseBoard(SpriteBatch sb){
+
+    }
+
     private void update(float delta){
-        updateCursor(delta);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)){
+            currentBoard = null;
+        }else{
+            renderChooseBoard(game.batch);
+        }
+        if (currentBoard!=null){
+            updateCursor(delta);
+        }
+        clickManager.update(delta);
     }
 
     private void updateCursor(float delta){
@@ -105,30 +121,40 @@ public class MegaGame extends GameScreen {
         }
         //endregion
 
+        if (board[boardX][boardY] == currentBoard){
+            board[boardX][boardY].light(cellX, cellY, playerOneTurn, game.batch);
+        }
 
-        board[boardX][boardY].light(cellX, cellY, playerOneTurn, game.batch);
-//
-//        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
-//            clickManager.reset();
-//            if (playerOneTurn){
-//                board.draw(currentX, currentY, 1);
-//                game.sm.xPlace.play();
-//            }else{
-//                board.draw(currentX, currentY, 2);
-//                game.sm.oPlace.play();
-//            }
-//            playerOneTurn = !playerOneTurn;
-//            boolean gameOver = GameOverCheck.isGameOver(board, this);
-//            boolean boardFull = GameOverCheck.isBoardFull(board, this);
-//            if (gameOver){
-//                game.DisposeScreen();
-//                game.AddScreen(new GameOverScreen(game, playerOneWon));
-//            }
-//            else if (boardFull){
-//                game.DisposeScreen();
-//                game.AddScreen(new GameScreen(game));
-//            }
-//        }
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
+            clickManager.reset();
+            if (playerOneTurn){
+                currentBoard.draw(cellX, cellY, 1);
+                game.sm.xPlace.play();
+            }else{
+                currentBoard.draw(cellX, cellY, 2);
+                game.sm.oPlace.play();
+            }
+            playerOneTurn = !playerOneTurn;
+            boolean boardComplete = GameOverCheck.isGameOver(currentBoard);
+            if (boardComplete){
+//                mark board on main scoring grid
+                mainBoard.draw(currentBoardX, currentBoardY, currentBoard.getWinner());
+
+                //get the new board and if that board is full, make the current board undefined
+                setCurrentBoard(cellX, cellY);
+                if (GameOverCheck.isBoardFull(currentBoard)){
+                    currentBoard = null;
+                }
+            }
+            boolean boardFull = GameOverCheck.isMegaFull(board);
+            if (boardFull){
+                boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
+                if (mainComplete){
+                    game.DisposeScreen();
+                    game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
+                }
+            }
+        }
     }
 
     private void createBoard(){
@@ -138,7 +164,7 @@ public class MegaGame extends GameScreen {
                 board[i][j] = new Board(game, new xY(boardStart.x + (i*boardSize), boardStart.y + (j*boardSize)), boardSize);
             }
         }
-        currentBoard = board[1][1];
+        setCurrentBoard(1,1);
     }
 
     //region button
@@ -166,6 +192,12 @@ public class MegaGame extends GameScreen {
         } else{
             back = false;
         }
+    }
+
+    private void setCurrentBoard(int x, int y){
+        currentBoard = board[x][y];
+        currentBoardX = x;
+        currentBoardY = y;
     }
 //    endregion
 

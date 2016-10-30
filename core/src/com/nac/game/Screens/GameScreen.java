@@ -49,10 +49,6 @@ public class GameScreen implements Screen {
         if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             buttonListener();
         }
-        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-            game.DisposeScreen();
-            game.AddScreen(new GameOverScreen(game, true));
-        }
         game.batch.end();
     }
 
@@ -88,11 +84,11 @@ public class GameScreen implements Screen {
                 game.sm.oPlace.play();
             }
             playerOneTurn = !playerOneTurn;
-            boolean gameOver = GameOverCheck.isGameOver(board, this);
-            boolean boardFull = GameOverCheck.isBoardFull(board, this);
+            boolean gameOver = GameOverCheck.isGameOver(board);
+            boolean boardFull = GameOverCheck.isBoardFull(board);
             if (gameOver){
                 game.DisposeScreen();
-                game.AddScreen(new GameOverScreen(game, playerOneWon));
+                game.AddScreen(new GameOverScreen(game, board.getWinner()));
             }
             else if (boardFull){
                 game.DisposeScreen();
