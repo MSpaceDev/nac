@@ -62,7 +62,6 @@ public class GUIScreen extends GameScreen {
             buttonListener();
             clickManager.reset();
         }
-        System.out.println(toggleMusicButton);
         game.batch.end();
     }
 
