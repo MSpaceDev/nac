@@ -43,7 +43,11 @@ public class Board{
                 grid[i][j].render(game.batch);
             }
         }
-        sb.draw(boardRed, boardStart.x, boardStart.y, size, size);
+        if(!activeBoard){
+            sb.draw(boardRed, boardStart.x, boardStart.y, size, size);
+        } else{
+            sb.draw(boardWhite, boardStart.x, boardStart.y, size, size);
+        }
     }
 
     private void createGrid(){
