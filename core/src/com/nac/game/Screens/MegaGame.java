@@ -103,10 +103,6 @@ public class MegaGame extends GameScreen {
     private void updateCursor(float delta){
         int currentX = (x - boardStart.x)/currentBoard.getBlockSize();
         int currentY = (y - boardStart.y)/currentBoard.getBlockSize();
-        int boardX = currentX/3;
-        int boardY = currentY/3;
-        int cellX = currentX%3;
-        int cellY = currentY%3;
 
         //region clamping values to avoid arrayoutofbounds
         if (currentX>8){
@@ -120,31 +116,12 @@ public class MegaGame extends GameScreen {
         }else if(currentY<0){
             currentY = 0;
         }
-
-        if (cellX>2){
-            cellX = 2;
-        }else if(cellX<0){
-            cellX = 0;
-        }
-
-        if (cellY>2){
-            cellY = 2;
-        }else if(cellY<0){
-            cellY = 0;
-        }
-
-        if (boardX>2){
-            boardX = 2;
-        }else if(boardX<0){
-            boardX = 0;
-        }
-
-        if (boardY>2){
-            boardY = 2;
-        }else if(boardY<0){
-            boardY = 0;
-        }
         //endregion
+
+        int boardX = currentX/3;
+        int boardY = currentY/3;
+        int cellX = currentX%3;
+        int cellY = currentY%3;
 
         if (board[boardX][boardY] == currentBoard){
             board[boardX][boardY].light(cellX, cellY, playerOneTurn, game.batch);
@@ -155,42 +132,47 @@ public class MegaGame extends GameScreen {
             clickManager.reset();
             boolean drawn;
             if (playerOneTurn){
-                drawn = currentBoard.draw(cellX, cellY, 1);
-                game.sm.xPlace.play();
+                drawn = board[boardX][boardY].draw(cellX, cellY, 1);
+                if (drawn) {
+                    game.sm.xPlace.play();
+                }
             }else{
-                drawn = currentBoard.draw(cellX, cellY, 2);
-                game.sm.oPlace.play();
+                drawn = board[boardX][boardY].draw(cellX, cellY, 2);
+                if (drawn) {
+                    game.sm.oPlace.play();
+                }
             }
             if (drawn){
                 playerOneTurn = !playerOneTurn;
-            }
-
-            boolean boardComplete = GameOverCheck.isGameOver(currentBoard);
-            if (boardComplete && currentBoard.getWinner()!=0){
+                boolean boardComplete = GameOverCheck.isGameOver(currentBoard);
+                if (boardComplete && currentBoard.getWinner()!=0){
 //                mark board on main scoring grid
-                mainBoard.draw(currentBoardX, currentBoardY, currentBoard.getWinner());
-            }
-            //get the new board and if that board is full, make the current board undefined
-            currentBoard.setActiveBoard(false);
-            setCurrentBoard(cellX, cellY);
-            if (GameOverCheck.isBoardFull(currentBoard)){
+                    mainBoard.draw(currentBoardX, currentBoardY, currentBoard.getWinner());
+                }
+                //get the new board and if that board is full, make the current board undefined
                 currentBoard.setActiveBoard(false);
-                currentBoard = null;
-            }
-            //check if the main board is full
-            boolean boardFull = GameOverCheck.isMegaFull(board);
-            if (boardFull){
-                boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
-                if (mainComplete){
-                    game.DisposeScreen();
-                    game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
+                setCurrentBoard(cellX, cellY);
+                if (GameOverCheck.isBoardFull(currentBoard)){
+                    currentBoard.setActiveBoard(false);
+                    currentBoard = null;
+                }
+                //check if the main board is full
+                boolean boardFull = GameOverCheck.isMegaFull(board);
+                if (boardFull){
+                    boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
+                    if (mainComplete){
+                        game.DisposeScreen();
+                        game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
+                    }
+                }else{
+                    boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
+                    if (mainComplete){
+                        game.DisposeScreen();
+                        game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
+                    }
                 }
             }else{
-                boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
-                if (mainComplete){
-                    game.DisposeScreen();
-                    game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
-                }
+                game.sm.buttonPress.play();
             }
         }
     }
@@ -204,6 +186,7 @@ public class MegaGame extends GameScreen {
         }
         setCurrentBoard(1,1);
         mainBoard = new Board(game, new xY(Driver.width / 2 -40,Driver.height / 10 * 8), 80);
+        mainBoard.setActiveBoard(true);
         blockSize = board[0][0].getBlockSize();
     }
 

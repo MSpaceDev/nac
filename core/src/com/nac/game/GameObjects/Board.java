@@ -69,7 +69,7 @@ public class Board{
 
     public boolean draw(int x, int y, int val){
 //        will return true if something was drawn
-        if (grid[y][x].getVal() == 0){
+        if (grid[y][x].getVal() == 0 && activeBoard){
             grid[y][x].setVal(val);
         }else{
             return false;

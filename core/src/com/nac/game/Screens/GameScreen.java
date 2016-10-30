@@ -38,6 +38,15 @@ public class GameScreen implements Screen {
         clickManager = new ClickManager();
     }
 
+    public GameScreen(Driver game, boolean playerOneTurn) {
+        this.game = game;
+        this.playerOneTurn = playerOneTurn;
+        board = new Board(game, new xY(60,20), Driver.width - 120);
+        backInactive = new Texture("buttons/backInactive.png");
+        backActive = new Texture("buttons/backActive.png");
+        clickManager = new ClickManager();
+    }
+
     @Override
     public void render(float delta) {
         game.batch.begin();
@@ -95,7 +104,8 @@ public class GameScreen implements Screen {
             }
             else if (boardFull){
                 game.DisposeScreen();
-                game.AddScreen(new GameScreen(game));
+//                playerOneTurn = !playerOneTurn;
+                game.AddScreen(new GameScreen(game, playerOneTurn));
             }
         }
     }
