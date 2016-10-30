@@ -9,11 +9,17 @@ public class ClickManager {
     float timer;
     float clickDelay = 0.5f;
 
+    public ClickManager(float clickDelay) {
+        this.clickDelay = clickDelay;
+    }
+
+    public ClickManager() {
+    }
+
     public void update(float delta){
         timer+=delta;
         if (timer>clickDelay){
             canClick = true;
-            timer = 0;
         }
     }
 

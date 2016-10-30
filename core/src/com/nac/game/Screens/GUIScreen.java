@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
+import com.nac.game.Utilities.ClickManager;
 import com.nac.game.Utilities.SoundManager;
 
 /**
@@ -18,41 +19,50 @@ public class GUIScreen extends GameScreen {
     Texture playInactive;
     Texture exitActive;
     Texture exitInactive;
-    Texture playMusicInactive;
     Texture playMusicActive;
+    Texture playMusicInactive;
+    Texture playMusicHoverActive;
+    Texture playMusicHoverInactive;
     boolean play;
     boolean exit;
-    boolean playMusic;
-    boolean playMusicButton;
+
+    boolean hoverMusicButton;
+    boolean toggleMusicButton;
+
     int x;
     int y;
 
     public GUIScreen(Driver game) {
         super(game);
-        playMusic = true;
-        if(playMusic){
-            game.sm.music.loop(0.5f);
-        }
+        game.sm.music.loop(0.5f);
+        toggleMusicButton = true;
 
         //instantiate textures
         bg = new Texture("background.png");
         title = new Texture("buttons/title.png");
         playActive = new Texture("buttons/playActive.png");
         playInactive = new Texture("buttons/playInactive.png");
-        playMusicActive = new Texture("buttons/checkBoxInactive.png");
-        playMusicInactive = new Texture("buttons/checkBox.png");
+        playMusicHoverActive = new Texture("buttons/playMusicHoverActive.png");
+        playMusicHoverInactive = new Texture("buttons/playMusicHoverInactive.png");
+        playMusicActive = new Texture("buttons/playMusicActive.png");
+        playMusicInactive = new Texture("buttons/playMusicInactive.png");
         exitInactive = new Texture("buttons/exitInactive.png");
         exitActive = new Texture("buttons/exitActive.png");
+
+        clickManager = new ClickManager(0.2f);
     }
 
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
+        clickManager.update(delta);
         updateButtons();
         renderButtons(game.batch);
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
             buttonListener();
+            clickManager.reset();
         }
+        System.out.println(toggleMusicButton);
         game.batch.end();
     }
 
@@ -62,6 +72,14 @@ public class GUIScreen extends GameScreen {
             game.AddScreen(new SizeSelectScreen(game));
         } else if (exit){
             System.exit(0);
+        } else if(hoverMusicButton){
+            toggleMusicButton = !toggleMusicButton;
+        }
+
+        if(!toggleMusicButton && hoverMusicButton){
+            game.sm.music.setVolume(0, 0.0f);
+        } else if(toggleMusicButton && hoverMusicButton){
+            game.sm.music.setVolume(0, 0.5f);
         }
     }
 
@@ -78,11 +96,16 @@ public class GUIScreen extends GameScreen {
         } else{
         sb.draw(exitActive, Driver.width / 2 - exitActive.getWidth() / 2, Driver.height / 8 * 2);
         }
-        if(!playMusicButton) {
-            sb.draw(playMusicInactive, Driver.width / 5 * 4 - playMusicInactive.getWidth() / 2, Driver.height / 8 * 3);
-        } else{
-            sb.draw(playMusicActive, Driver.width / 2 - playMusicActive.getWidth() / 2, Driver.height / 8 * 3);
+        if(!hoverMusicButton && !toggleMusicButton){
+            sb.draw(playMusicHoverInactive, Driver.width / 2 - playMusicHoverInactive.getWidth() / 2, Driver.height / 16 * 6.5f);
+        } else if(hoverMusicButton && !toggleMusicButton){
+            sb.draw(playMusicHoverActive, Driver.width / 2 - playMusicHoverInactive.getWidth() / 2, Driver.height / 16 * 6.5f);
+        } else if(!hoverMusicButton && toggleMusicButton){
+            sb.draw(playMusicInactive, Driver.width / 2 - playMusicHoverInactive.getWidth() / 2, Driver.height / 16 * 6.5f);
+        } else if(hoverMusicButton && toggleMusicButton){
+            sb.draw(playMusicActive, Driver.width / 2 - playMusicHoverInactive.getWidth() / 2, Driver.height / 16 * 6.5f);
         }
+
 }
 
     private void updateButtons(){
@@ -102,12 +125,12 @@ public class GUIScreen extends GameScreen {
         }else{
             exit = false;
         }
-        if (x > Driver.width / 2 - playMusicInactive.getWidth() / 5 * 3 && x <  Driver.width / 5 * 3 - playMusicInactive.getWidth() / 2 + playMusicInactive.getWidth() &&
-                y > Driver.height / 2 && y < Driver.height / 2 + playMusicInactive.getHeight() && Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            playMusicButton = true;
-        }else{
-            playMusicButton = false;
-        }
 
+        if(x > Driver.width / 2 - playMusicHoverInactive.getWidth() / 2 && x < Driver.width / 2 - playMusicHoverInactive.getWidth() / 2 + playMusicHoverInactive.getWidth()
+                && y > Driver.height / 16 * 6.5f && y < Driver.height / 16 * 6.5f + playMusicHoverInactive.getHeight()){
+            hoverMusicButton = true;
+        } else{
+            hoverMusicButton = false;
+        }
     }
 }
