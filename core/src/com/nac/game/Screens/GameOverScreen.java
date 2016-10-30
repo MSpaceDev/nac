@@ -13,26 +13,26 @@ import com.nac.game.Driver;
 public class GameOverScreen extends GameScreen {
     Texture xWin;
     Texture oWin;
+    Texture draw;
     Texture bg;
-    boolean playerOneWon;
+    int winner;
 
     public GameOverScreen(Driver game, int winner) {
         super(game);
         bg = new Texture("background.png");
         xWin = new Texture("buttons/xWin.png");
         oWin = new Texture("buttons/oWin.png");
-        if (winner == 1){
-            playerOneWon = true;
-        }else{
-            playerOneWon = false;
-        }
+        draw = new Texture("buttons/draw.png");
         game.sm.winner.play();
+        this.winner = winner;
     }
 
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
-        if(playerOneWon) {
+        if(winner == 0){
+            game.batch.draw(draw, Driver.width / 2 - oWin.getWidth() / 2, Driver.height / 8 * 5);
+        } else if(winner == 1) {
             game.batch.draw(xWin, Driver.width / 2 - xWin.getWidth() / 2, Driver.height / 8 * 5);
         } else {
             game.batch.draw(oWin, Driver.width / 2 - oWin.getWidth() / 2, Driver.height / 8 * 5);
