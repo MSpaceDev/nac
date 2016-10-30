@@ -15,17 +15,24 @@ import com.nac.game.Screens.GameScreen;
 public class Board{
     Driver game;
     Texture back;
+    Texture boardWhite;
+    Texture boardRed;
     xY boardStart;
     Block[][] grid;
     int blockSize;
     int headingHeight;
+    int size;
     int winner; //0=no winner 1="X" winner 2="O" winner
+    boolean activeBoard;
 
     public Board(Driver game, xY boardStart, int size) {
         this.game = game;
         this.boardStart = boardStart;
+        boardRed = new Texture("boardRed.png");
+        boardWhite = new Texture("boardWhite.png");
         back = new Texture("buttons/backInactive.png");
         headingHeight = back.getWidth();
+        this.size = size;
         blockSize = size / 3;
         createGrid();
     }
@@ -35,6 +42,11 @@ public class Board{
             for (int j = 0; j < 3; j++) {
                 grid[i][j].render(game.batch);
             }
+        }
+        if(!activeBoard){
+            sb.draw(boardRed, boardStart.x, boardStart.y, size, size);
+        } else{
+            sb.draw(boardWhite, boardStart.x, boardStart.y, size, size);
         }
     }
 
