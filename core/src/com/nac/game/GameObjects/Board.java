@@ -22,6 +22,7 @@ public class Board{
     int blockSize;
     int headingHeight;
     int size;
+    int winner; //0=no winner 1="X" winner 2="O" winner
     boolean activeBoard;
 
     public Board(Driver game, xY boardStart, int size) {
@@ -77,5 +78,13 @@ public class Board{
         if (grid[y][x].getVal()==0){
             grid[y][x].light(Gdx.graphics.getDeltaTime(), playerOneTurn, sb);
         }
+    }
+
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setWinner(int winner) {
+        this.winner = winner;
     }
 }

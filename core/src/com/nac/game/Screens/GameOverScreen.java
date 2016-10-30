@@ -16,12 +16,16 @@ public class GameOverScreen extends GameScreen {
     Texture bg;
     boolean playerOneWon;
 
-    public GameOverScreen(Driver game, boolean playerOneWon) {
+    public GameOverScreen(Driver game, int winner) {
         super(game);
         bg = new Texture("background.png");
         xWin = new Texture("buttons/xWin.png");
         oWin = new Texture("buttons/oWin.png");
-        this.playerOneWon = playerOneWon;
+        if (winner == 1){
+            playerOneWon = true;
+        }else{
+            playerOneWon = false;
+        }
         game.sm.winner.play();
     }
 

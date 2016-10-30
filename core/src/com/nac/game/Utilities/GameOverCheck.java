@@ -10,12 +10,12 @@ import com.nac.game.Screens.GameScreen;
  */
 public class GameOverCheck {
 
-    public static boolean isGameOver(Board board, GameScreen gameScreen){
+    public static boolean isGameOver(Board board){
         Block block;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j <  3; j++) {
                 block = board.getGrid()[i][j];
-                if (traverse(block, board, gameScreen) == true){
+                if (traverse(block, board) == true){
                     //a win was found
                     return true;
                 }
@@ -24,7 +24,7 @@ public class GameOverCheck {
         return false;
     }
 
-    private static boolean traverse(Block block, Board board, GameScreen gameScreen){
+    private static boolean traverse(Block block, Board board){
         int x = block.getY();
         int y = block.getX();
         int val = block.getVal();
@@ -44,7 +44,7 @@ public class GameOverCheck {
                     count = 1;
                 }
                 if (count == 3){
-                    gameScreen.setPlayerOneWon(checkWinner(val));
+                    board.setWinner(val);
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -71,7 +71,7 @@ public class GameOverCheck {
                     count = 1;
                 }
                 if (count == 3){
-                    gameScreen.setPlayerOneWon(checkWinner(val));
+                    board.setWinner(val);
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -97,7 +97,7 @@ public class GameOverCheck {
                     count = 1;
                 }
                 if (count == 3){
-                    gameScreen.setPlayerOneWon(checkWinner(val));
+                    board.setWinner(val);
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -123,7 +123,7 @@ public class GameOverCheck {
                     count = 1;
                 }
                 if (count == 3){
-                    gameScreen.setPlayerOneWon(checkWinner(val));
+                    board.setWinner(val);
                     return true;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -133,18 +133,21 @@ public class GameOverCheck {
         return gameOver;
     }
 
-    private static boolean checkWinner(int val){
-        if (val == 1){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public static boolean isBoardFull(Board board, GameScreen gameScreen){
+    public static boolean isBoardFull(Board board){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j <  2; j++) {
                 if (board.getGrid()[i][j].getVal() == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isMegaFull(Board[][] boards){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!isBoardFull(boards[i][j])){
                     return false;
                 }
             }
