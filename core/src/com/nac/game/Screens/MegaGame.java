@@ -174,11 +174,18 @@ public class MegaGame extends GameScreen {
             currentBoard.setActiveBoard(false);
             setCurrentBoard(cellX, cellY);
             if (GameOverCheck.isBoardFull(currentBoard)){
+                currentBoard.setActiveBoard(false);
                 currentBoard = null;
             }
             //check if the main board is full
             boolean boardFull = GameOverCheck.isMegaFull(board);
             if (boardFull){
+                boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
+                if (mainComplete){
+                    game.DisposeScreen();
+                    game.AddScreen(new GameOverScreen(game, mainBoard.getWinner()));
+                }
+            }else{
                 boolean mainComplete = GameOverCheck.isGameOver(mainBoard);
                 if (mainComplete){
                     game.DisposeScreen();

@@ -76,14 +76,17 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
             clickManager.reset();
+            boolean draw;
             if (playerOneTurn){
-                board.draw(currentX, currentY, 1);
+                draw = board.draw(currentX, currentY, 1);
                 game.sm.xPlace.play();
             }else{
-                board.draw(currentX, currentY, 2);
+                draw = board.draw(currentX, currentY, 2);
                 game.sm.oPlace.play();
             }
-            playerOneTurn = !playerOneTurn;
+            if (draw){
+                playerOneTurn = !playerOneTurn;
+            }
             boolean gameOver = GameOverCheck.isGameOver(board);
             boolean boardFull = GameOverCheck.isBoardFull(board);
             if (gameOver){
