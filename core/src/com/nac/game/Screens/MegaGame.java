@@ -22,6 +22,7 @@ public class MegaGame extends GameScreen {
     Board currentBoard;
     int currentBoardX;
     int currentBoardY;
+    int blockSize;
     Board mainBoard;
     Texture backInactive;
     Texture backActive;
@@ -57,20 +58,44 @@ public class MegaGame extends GameScreen {
                 board[i][j].render(game.batch);
             }
         }
+        mainBoard.render(game.batch);
     }
 
     private void renderChooseBoard(SpriteBatch sb){
+        int currentX = (x - boardStart.x)/blockSize;
+        int currentY = (y - boardStart.y)/blockSize;
+        int boardX = currentX/3;
+        int boardY = currentY/3;
 
+        //region clamping
+        if (boardX>2){
+            boardX = 2;
+        }else if(boardX<0){
+            boardX = 0;
+        }
+
+        if (boardY>2){
+            boardY = 2;
+        }else if(boardY<0){
+            boardY = 0;
+        }
+        //endregion
+
+        board[boardX][boardY].flash(sb, Gdx.graphics.getDeltaTime());
+        if (Gdx.input.isButtonPressed(Input.Keys.LEFT) && clickManager.canClick){
+            clickManager.reset();
+            currentBoard = board[boardX][boardY];
+        }
     }
 
     private void update(float delta){
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)){
             currentBoard = null;
-        }else{
-            renderChooseBoard(game.batch);
         }
         if (currentBoard!=null){
             updateCursor(delta);
+        }else{
+            renderChooseBoard(game.batch);
         }
         clickManager.update(delta);
     }
@@ -141,11 +166,12 @@ public class MegaGame extends GameScreen {
             }
 
             boolean boardComplete = GameOverCheck.isGameOver(currentBoard);
-            if (boardComplete){
+            if (boardComplete && currentBoard.getWinner()!=0){
 //                mark board on main scoring grid
                 mainBoard.draw(currentBoardX, currentBoardY, currentBoard.getWinner());
             }
             //get the new board and if that board is full, make the current board undefined
+            currentBoard.setActiveBoard(false);
             setCurrentBoard(cellX, cellY);
             if (GameOverCheck.isBoardFull(currentBoard)){
                 currentBoard = null;
@@ -170,6 +196,8 @@ public class MegaGame extends GameScreen {
             }
         }
         setCurrentBoard(1,1);
+        mainBoard = new Board(game, new xY(Driver.width / 2 -40,Driver.height / 10 * 8), 80);
+        blockSize = board[0][0].getBlockSize();
     }
 
     //region button
@@ -201,6 +229,7 @@ public class MegaGame extends GameScreen {
 
     private void setCurrentBoard(int x, int y){
         currentBoard = board[x][y];
+        currentBoard.setActiveBoard(true);
         currentBoardX = x;
         currentBoardY = y;
     }

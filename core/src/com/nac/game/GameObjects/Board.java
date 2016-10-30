@@ -2,6 +2,7 @@ package com.nac.game.GameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.nac.game.Driver;
@@ -24,6 +25,9 @@ public class Board{
     int size;
     int winner; //0=no winner 1="X" winner 2="O" winner
     boolean activeBoard;
+    boolean flashUp;
+    float alpha;
+    Sprite board;
 
     public Board(Driver game, xY boardStart, int size) {
         this.game = game;
@@ -35,6 +39,10 @@ public class Board{
         this.size = size;
         blockSize = size / 3;
         createGrid();
+        board = new Sprite(boardWhite);
+        board.setSize(size, size);
+        board.setPosition(boardStart.x, boardStart.y);
+        winner = 0;
     }
 
     public void render(SpriteBatch sb){
@@ -69,6 +77,23 @@ public class Board{
         return true;
     }
 
+    public void flash(SpriteBatch sb, float delta){
+        if (flashUp){
+            alpha += delta;
+            board.setAlpha(alpha);
+            if (alpha>0.9f){
+                flashUp = false;
+            }
+        }else{
+            alpha -= delta;
+            board.setAlpha(alpha);
+            if (alpha<0.1f){
+                flashUp = true;
+            }
+        }
+        board.draw(sb);
+    }
+
     public int getBlockSize() {
         return blockSize;
     }
@@ -90,6 +115,10 @@ public class Board{
 
     public int getWinner() {
         return winner;
+    }
+
+    public void setActiveBoard(boolean activeBoard) {
+        this.activeBoard = activeBoard;
     }
 
     public void setWinner(int winner) {
