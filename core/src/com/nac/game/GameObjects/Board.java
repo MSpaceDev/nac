@@ -117,6 +117,10 @@ public class Board{
         return winner;
     }
 
+    public boolean isActiveBoard() {
+        return activeBoard;
+    }
+
     public void setActiveBoard(boolean activeBoard) {
         this.activeBoard = activeBoard;
     }

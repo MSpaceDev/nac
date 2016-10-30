@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
         clickManager = new ClickManager();
+        board.setActiveBoard(true);
     }
 
     public GameScreen(Driver game, boolean playerOneTurn) {
@@ -45,6 +46,7 @@ public class GameScreen implements Screen {
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
         clickManager = new ClickManager();
+        board.setActiveBoard(true);
     }
 
     @Override

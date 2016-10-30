@@ -85,6 +85,11 @@ public class MegaGame extends GameScreen {
         if (Gdx.input.isButtonPressed(Input.Keys.LEFT) && clickManager.canClick){
             clickManager.reset();
             currentBoard = board[boardX][boardY];
+            currentBoard.setActiveBoard(true);
+            if (GameOverCheck.isBoardFull(currentBoard)){
+                currentBoard.setActiveBoard(false);
+                currentBoard = null;
+            }
         }
     }
 
