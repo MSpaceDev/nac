@@ -21,6 +21,7 @@ public class GameOverCheck {
                 }
             }
         }
+        board.setWinner(0);
         return false;
     }
 

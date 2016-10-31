@@ -12,4 +12,10 @@ public class utils {
         Random rand = new Random();
         return rand.nextInt(j-i)+i;
     }
+
+    public static int generate(int i){
+//        will generate a number between 0 and i exclusive
+        Random rand = new Random();
+        return rand.nextInt(i);
+    }
 }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
+import com.nac.game.GameObjects.Particle;
+
+import java.util.ArrayList;
 
 /**
  * Created by user on 10/29/2016.
@@ -17,6 +20,8 @@ public class GameOverScreen extends GameScreen {
     Texture bg;
     int winner;
 
+    ArrayList<Particle> particles;
+
     public GameOverScreen(Driver game, int winner) {
         super(game);
         bg = new Texture("background.png");
@@ -25,11 +30,17 @@ public class GameOverScreen extends GameScreen {
         draw = new Texture("buttons/draw.png");
         game.sm.winner.play();
         this.winner = winner;
+
+        particles = new ArrayList<Particle>();
+        for (int i = 0; i < 60; i++) {
+            particles.add(new Particle());
+        }
     }
 
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(bg, 0, 0);
+        renderParticles(game.batch);
         if(winner == 0){
             game.batch.draw(draw, Driver.width / 2 - oWin.getWidth() / 2, Driver.height / 8 * 5);
         } else if(winner == 1) {
@@ -57,6 +68,12 @@ public class GameOverScreen extends GameScreen {
             sb.draw(backInactive, Driver.width / 2 - backInactive.getWidth() / 2, Driver.height / 8 * 3);
         }else{
             sb.draw(backActive, Driver.width / 2 - backActive.getWidth() / 2, Driver.height / 8 * 3);
+        }
+    }
+
+    private void renderParticles(SpriteBatch sb){
+        for (Particle p: particles){
+            p.render(sb);
         }
     }
 

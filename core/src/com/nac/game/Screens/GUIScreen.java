@@ -3,17 +3,23 @@ package com.nac.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.nac.game.Driver;
+import com.nac.game.GameObjects.Particle;
 import com.nac.game.Utilities.ClickManager;
 import com.nac.game.Utilities.SoundManager;
+import com.nac.game.Utilities.utils;
+
+import java.util.ArrayList;
 
 /**
  * Created by user on 10/29/2016.
  */
 public class GUIScreen extends GameScreen {
     Texture bg;
+    Texture naught;
     Texture title;
     Texture playActive;
     Texture playInactive;
@@ -39,6 +45,7 @@ public class GUIScreen extends GameScreen {
 
         //instantiate textures
         bg = new Texture("background.png");
+        naught = new Texture("naught.png");
         title = new Texture("buttons/title.png");
         playActive = new Texture("buttons/playActive.png");
         playInactive = new Texture("buttons/playInactive.png");
@@ -50,6 +57,7 @@ public class GUIScreen extends GameScreen {
         exitActive = new Texture("buttons/exitActive.png");
 
         clickManager = new ClickManager(0.2f);
+
     }
 
     public void render(float delta){
@@ -104,7 +112,6 @@ public class GUIScreen extends GameScreen {
         } else if(hoverMusicButton && toggleMusicButton){
             sb.draw(playMusicActive, Driver.width / 2 - playMusicHoverInactive.getWidth() / 2, Driver.height / 16 * 6.5f);
         }
-
 }
 
     private void updateButtons(){

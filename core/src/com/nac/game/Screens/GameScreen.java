@@ -36,6 +36,17 @@ public class GameScreen implements Screen {
         backInactive = new Texture("buttons/backInactive.png");
         backActive = new Texture("buttons/backActive.png");
         clickManager = new ClickManager();
+        board.setActiveBoard(true);
+    }
+
+    public GameScreen(Driver game, boolean playerOneTurn) {
+        this.game = game;
+        this.playerOneTurn = playerOneTurn;
+        board = new Board(game, new xY(60,20), Driver.width - 120);
+        backInactive = new Texture("buttons/backInactive.png");
+        backActive = new Texture("buttons/backActive.png");
+        clickManager = new ClickManager();
+        board.setActiveBoard(true);
     }
 
     @Override
@@ -76,14 +87,17 @@ public class GameScreen implements Screen {
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && clickManager.canClick){
             clickManager.reset();
+            boolean draw;
             if (playerOneTurn){
-                board.draw(currentX, currentY, 1);
+                draw = board.draw(currentX, currentY, 1);
                 game.sm.xPlace.play();
             }else{
-                board.draw(currentX, currentY, 2);
+                draw = board.draw(currentX, currentY, 2);
                 game.sm.oPlace.play();
             }
-            playerOneTurn = !playerOneTurn;
+            if (draw){
+                playerOneTurn = !playerOneTurn;
+            }
             boolean gameOver = GameOverCheck.isGameOver(board);
             boolean boardFull = GameOverCheck.isBoardFull(board);
             if (gameOver){
@@ -92,7 +106,8 @@ public class GameScreen implements Screen {
             }
             else if (boardFull){
                 game.DisposeScreen();
-                game.AddScreen(new GameScreen(game));
+//                playerOneTurn = !playerOneTurn;
+                game.AddScreen(new GameScreen(game, playerOneTurn));
             }
         }
     }
